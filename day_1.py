@@ -4,4 +4,9 @@ url = "https://api.upbit.com/v1/ticker?markets=KRW-BTC"
 
 response = requests.get(url)
 
-print(response.json())
+data = response.json()
+
+file_path = "data.json"
+
+with open(file_path,"w",encoding="utf") as f:
+    json.dump(data, f)
