@@ -1,8 +1,10 @@
+DROP TABLE IF EXISTS data_set;
+
 CREATE TABLE data_set(
     id int primary key auto_increment,
-    market varchar(100) unique,
+    market varchar(100),
     trade_date date,
-    trade_time time unique,
+    trade_time time,
     trade_date_kst date,
     trade_time_kst time,
     trade_timestamp BIGINT,
@@ -17,13 +19,14 @@ CREATE TABLE data_set(
     signed_change_price float,
     signed_change_rate float,
     trade_volume float,
-    acc_trade_price decimal(100,10),
-    acc_trade_price_24h decimal(100,10),
-    acc_trade_volume decimal(100,10),
-    acc_trade_volume_24h decimal(100,10),
+    acc_trade_price decimal(30,10),
+    acc_trade_price_24h decimal(30,10),
+    acc_trade_volume decimal(30,10),
+    acc_trade_volume_24h decimal(30,10),
     highest_52_week_price float,
     highest_52_week_date date,
     lowest_52_week_price float,
     lowest_52_week_date date,
-    time_stamp BIGINT
-)
+    time_stamp BIGINT,
+    constraint data_set UNIQUE(market,trade_date)
+);
