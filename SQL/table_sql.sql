@@ -1,10 +1,9 @@
 DROP TABLE IF EXISTS data_set;
 
 CREATE TABLE data_set(
-    id int primary key auto_increment,
     market varchar(100),
-    slot_at datetime, --데이터가 속한 슬롯, 키
-    collected_at datetime, --api를 호출한 시점
+    slot_at datetime, #데이터가 속한 슬롯, 키
+    collected_at datetime, #api를 호출한 시점
     trade_date date,
     trade_time time,
     trade_date_kst date,

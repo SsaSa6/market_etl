@@ -9,8 +9,6 @@ def extract():
 
     collected_at = datetime.now() #현재 시각
 
-    print(collected_at)
-
     data = response.json()
 
     return data,collected_at
