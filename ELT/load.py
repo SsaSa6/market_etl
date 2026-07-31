@@ -2,21 +2,21 @@ import db
 import copy
 
 def load(data,collected_at,slot_at):
-    conn = db.get_connection()
+    conn = db.get_connection() #서버연동
 
-    change_dict = {"change": "changer", "timestamp": "time_stamp"}
+    change_dict = {"change": "changer", "timestamp": "time_stamp"} #키와 컬럼
 
-    data_copy = copy.deepcopy(data)
+    data_copy = copy.deepcopy(data) #원본 보존
 
     with conn:
-        with conn.cursor() as cursor:
-            data_copy[0]["slot_at"] = slot_at
+        with conn.cursor() as cursor: #cursor 키기
+            data_copy[0]["slot_at"] = slot_at   #slot_at,collected_at 추가
             data_copy[0]["collected_at"] = collected_at
 
-            for key,items in change_dict.items():
+            for key,items in change_dict.items(): #키를 컬럼과 같게 변경
                  data_copy[0][f"{items}"] = data_copy[0][f"{key}"]
 
-            del data_copy[0]["change"]
+            del data_copy[0]["change"] #남은 키 삭제
             del data_copy[0]["timestamp"]
             
             test = []
@@ -37,7 +37,7 @@ def load(data,collected_at,slot_at):
 
             values_sum = ','.join(values_sum)
 
-            insert_sql = f"INSERT INTO data_set ({columns}) VALUES ({values_sum})"
+            insert_sql = f"INSERT INTO data_set ({columns}) VALUES ({values_sum}) ON DUPLICATE KEY UPDATE market = market"
 
             print(data_copy)
 
