@@ -68,7 +68,6 @@ Upbit API  →  extract.py  →  load.py  →  MySQL (raw)  →  SQL 집계  →
 - [x] 접속 정보 `.env` 분리
 - [x] `load.py` — DB 적재
 - [x] 멱등성 확보 (중복 실행 시 무시)
-- [ ] cron 자동 실행
 - [ ] Airflow 전환
 - [ ] 일별 집계(mart) 테이블
 - [ ] 실패 알림

@@ -39,8 +39,6 @@ def load(data,collected_at,slot_at):
 
             insert_sql = f"INSERT INTO data_set ({columns}) VALUES ({values_sum}) ON DUPLICATE KEY UPDATE market = market"
 
-            print(data_copy)
-
             cursor.execute(insert_sql,values) #sql 실행
 
             conn.commit()
