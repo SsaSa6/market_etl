@@ -56,8 +56,9 @@ Upbit API  →  extract.py  →  load.py  →  MySQL (raw)  →  SQL 집계  →
 ## 기술 스택
 
 - Python (`requests`, `pymysql`, `python-dotenv`)
+- Docker
 - MySQL
-- 스케줄링: cron → Airflow (예정)
+- Airflow
 
 ## 진행 상황
 
@@ -68,6 +69,7 @@ Upbit API  →  extract.py  →  load.py  →  MySQL (raw)  →  SQL 집계  →
 - [x] 접속 정보 `.env` 분리
 - [x] `load.py` — DB 적재
 - [x] 멱등성 확보 (중복 실행 시 무시)
+- [x] Docker로 mysql 서버 올리기
 - [ ] Airflow 전환
 - [ ] 일별 집계(mart) 테이블
 - [ ] 실패 알림
