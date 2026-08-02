@@ -42,6 +42,8 @@ Upbit API  →  extract.py  →  load.py  →  MySQL (raw)  →  SQL 집계  →
 | 대상 종목      | `KRW-BTC` 단일             | 완주를 우선. 종목 확장은 파라미터 추가만으로 가능하도록 스키마에 `market` 컬럼 유지                         |
 | 금액·수량 타입 | `DECIMAL`                  | `FLOAT`은 유효숫자 약 7자리로, 누적 거래대금에서 수천 원 단위 오차가 발생함을 실측으로 확인                 |
 | 중복 판단 기준 | `UNIQUE (market, slot_at)` | 재실행 시 중복 적재를 DB 레벨에서 차단                                                                      |
+| DB 실행 환경   | Docker 컨테이너            | 이후 추가할 Airflow와 같은 Compose 네트워크에 두어 서비스 이름으로 통신. 클라우드 배포 시에도 구성이 유지됨 |
+| DB 접속 계정   | 전용 계정 (`etl_user`)     | 파이프라인은 지정된 DB에만 접근. root 권한 노출을 피함                                                     |
 
 ### 시각 컬럼을 세 종류로 나눈 이유
 
@@ -80,14 +82,72 @@ Upbit API  →  extract.py  →  load.py  →  MySQL (raw)  →  SQL 집계  →
 
 ```
 market_etl/
-├── main.py           # 진입점. slot_at 생성 및 단계 호출
-├── extract.py        # 업비트 API 호출
-├── db.py             # DB 커넥션 생성
-├── table_sql.sql     # 테이블 DDL
-├── logs/             # 일자별 작업 기록
-└── .env              # 접속 정보 (git 추적 제외)
+├── ELT/
+│   ├── main.py            # 진입점. slot_at 생성 및 각 단계 호출
+│   ├── extract.py         # 업비트 API 호출, collected_at 생성
+│   ├── load.py            # MySQL 적재 (upsert)
+│   └── db.py              # DB 커넥션 생성
+├── SQL/
+│   └── table_sql.sql      # 테이블 DDL. 컨테이너 최초 기동 시 자동 실행
+├── docker-compose.yml     # MySQL 컨테이너 정의
+├── .env.example           # 필요한 환경변수 목록
+└── .env                   # 실제 접속 정보 (git 추적 제외)
 ```
 
 ## 실행 방법
 
-작성 예정 — `load.py` 완료 후 정리한다.
+**요구 사항**: Docker, Python 3.10+
+
+**1. 환경변수 설정**
+
+`.env.example`을 `.env`로 복사하고 값을 채운다.
+
+```
+MYSQL_ROOT_PASSWORD=관리자_비밀번호
+MYSQL_DATABASE=market_database
+MYSQL_USER=etl_user
+MYSQL_PASSWORD=파이프라인_계정_비밀번호
+DB_HOST=localhost
+DB_PORT=3308
+```
+
+`DB_PORT`는 호스트 쪽 포트다. 로컬에 MySQL이 이미 설치돼 있다면 3306과 겹치지 않는 값을 쓴다.
+
+**2. DB 컨테이너 기동**
+
+```bash
+docker compose up -d
+```
+
+최초 기동 시 DB·계정 생성과 `SQL/table_sql.sql` 실행까지 자동으로 이뤄진다. 초기화에 30초가량 걸리므로 아래 로그에서 `ready for connections`를 확인한 뒤 진행한다.
+
+```bash
+docker compose logs db
+```
+
+**3. 파이썬 의존성 설치**
+
+```bash
+pip install requests pymysql python-dotenv
+```
+
+**4. 실행**
+
+```bash
+python ELT/main.py
+```
+
+**5. 적재 확인**
+
+```bash
+docker compose exec db mysql -u etl_user -p market_database
+```
+
+```sql
+SELECT market, slot_at, trade_price FROM data_set ORDER BY slot_at DESC LIMIT 5;
+```
+
+### 참고
+
+- 컨테이너와 데이터를 모두 삭제하려면 `docker compose down -v`. `-v`는 볼륨까지 지우므로 적재된 데이터가 사라진다
+- `SQL/table_sql.sql`은 **볼륨이 비어 있을 때만** 실행된다. DDL을 수정한 뒤 반영하려면 `down -v` 후 다시 기동해야 한다
