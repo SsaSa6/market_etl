@@ -4,4 +4,4 @@ data.json
 
 *__pycache__
 
-.dags
+logs
