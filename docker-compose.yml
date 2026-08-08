@@ -15,11 +15,15 @@ x-airflow-common: &airflow-common
     AIRFLOW__SCHEDULER__ENABLE_HEALTH_CHECK: "true"
     _PIP_ADDITIONAL_REQUIREMENTS: ${_PIP_ADDITIONAL_REQUIREMENTS:-}
     AIRFLOW_CONFIG: "/opt/airflow/config/airflow.cfg"
+    DB_HOST: db
+    DB_PORT: "3306"
+    PYTHONPATH: "/opt/airflow/ELT"
   volumes:
     - ${AIRFLOW_PROJ_DIR:-.}/dags:/opt/airflow/dags
     - ${AIRFLOW_PROJ_DIR:-.}/logs:/opt/airflow/logs
     - ${AIRFLOW_PROJ_DIR:-.}/config:/opt/airflow/config
     - ${AIRFLOW_PROJ_DIR:-.}/plugins:/opt/airflow/plugins
+    - ./ELT:/opt/airflow/ELT #폴더 째로 마운트
   user: "${AIRFLOW_UID:-50000}:0"
   depends_on: &airflow-common-depends-on
     postgres:
