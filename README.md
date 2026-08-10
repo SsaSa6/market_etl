@@ -72,7 +72,7 @@ Upbit API  →  extract.py  →  load.py  →  MySQL (raw)  →  SQL 집계  →
 - [x] `load.py` — DB 적재
 - [x] 멱등성 확보 (중복 실행 시 무시)
 - [x] Docker로 mysql 서버 올리기
-- [ ] Airflow 전환
+- [x] Airflow 전환
 - [ ] 일별 집계(mart) 테이블
 - [ ] 실패 알림
 - [ ] 대시보드
