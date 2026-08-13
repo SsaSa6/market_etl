@@ -14,8 +14,10 @@ with DAG(dag_id="Market_ELT",
         ti.xcom_push(key = "xcom_key", value = extract.extract())
 
     def pull_xcom(ti):
-        data = ti.xcom_pull(key ="xcom_key", task_ids = "extract_task")
-        load.load(data)
+        slot_at = datetime.now().replace(second=0,microsecond=0)
+        data,collected_at = ti.xcom_pull(key ="xcom_key", task_ids = "extract")
+        print(data)
+        load.load(data=data,collected_at=collected_at,slot_at=slot_at)
 
     extract_task = PythonOperator(task_id="extract", python_callable=push_xcom)
 
