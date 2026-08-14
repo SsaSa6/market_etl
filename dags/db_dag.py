@@ -6,17 +6,18 @@ import extract
 import load
 
 with DAG(dag_id="Market_ELT", 
-         start_date=datetime(2026, 8, 6), 
-         schedule='@daily'
+         start_date=datetime(2026, 8, 14), 
+         schedule="*/5 * * * *",
+         catchup=False,
+         max_active_runs=1
     ) as dag:
 
     def push_xcom(ti): #airflow의 구동 메타 데이터
         ti.xcom_push(key = "xcom_key", value = extract.extract())
 
-    def pull_xcom(ti):
-        slot_at = datetime.now().replace(second=0,microsecond=0)
+    def pull_xcom(ti,**context):
+        slot_at = context["data_interval_start"]
         data,collected_at = ti.xcom_pull(key ="xcom_key", task_ids = "extract")
-        print(data)
         load.load(data=data,collected_at=collected_at,slot_at=slot_at)
 
     extract_task = PythonOperator(task_id="extract", python_callable=push_xcom)
