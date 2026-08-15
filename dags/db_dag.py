@@ -1,7 +1,6 @@
 from airflow.sdk import DAG
 from airflow.providers.standard.operators.python import PythonOperator
 from datetime import datetime
-from airflow.sdk.execution_time.xcom import XCom
 import extract
 import load
 
