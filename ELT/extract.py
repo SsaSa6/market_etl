@@ -6,7 +6,7 @@ def extract():
 
     response = requests.get(url)
 
-    collected_at = datetime.now() #현재 시각
+    collected_at = datetime.now()
 
     data = response.json()
 

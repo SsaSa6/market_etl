@@ -1,4 +1,4 @@
-DROP TABLE IF EXISTS data_set;
+CREATE TABLE IF NOT EXISTS data_set;
 
 CREATE TABLE data_set(
     market varchar(100),
