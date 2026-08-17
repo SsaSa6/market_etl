@@ -43,7 +43,7 @@ Upbit API  →  extract.py  →  load.py  →  MySQL (raw)  →  SQL 집계  →
 | 금액·수량 타입 | `DECIMAL`                  | `FLOAT`은 유효숫자 약 7자리로, 누적 거래대금에서 수천 원 단위 오차가 발생함을 실측으로 확인                 |
 | 중복 판단 기준 | `UNIQUE (market, slot_at)` | 재실행 시 중복 적재를 DB 레벨에서 차단                                                                      |
 | DB 실행 환경   | Docker 컨테이너            | 이후 추가할 Airflow와 같은 Compose 네트워크에 두어 서비스 이름으로 통신. 클라우드 배포 시에도 구성이 유지됨 |
-| DB 접속 계정   | 전용 계정 (`etl_user`)     | 파이프라인은 지정된 DB에만 접근. root 권한 노출을 피함                                                     |
+| DB 접속 계정   | 전용 계정 (`etl_user`)     | 파이프라인은 지정된 DB에만 접근. root 권한 노출을 피함                                                      |
 
 ### 시각 컬럼을 세 종류로 나눈 이유
 
@@ -73,6 +73,7 @@ Upbit API  →  extract.py  →  load.py  →  MySQL (raw)  →  SQL 집계  →
 - [x] 멱등성 확보 (중복 실행 시 무시)
 - [x] Docker로 mysql 서버 올리기
 - [x] Airflow 전환
+- [x] slot_at, collected_at의 타임존을 kst로 저장
 - [ ] 일별 집계(mart) 테이블
 - [ ] 실패 알림
 - [ ] 대시보드
