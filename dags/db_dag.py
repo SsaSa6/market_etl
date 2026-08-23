@@ -5,6 +5,8 @@ from datetime import datetime
 import extract
 import load
 
+default_args={"retries": 3, "retry_delay": timedelta(minutes=1)}
+
 kst_tz = pendulum.timezone("Asia/Seoul")
 
 with DAG(dag_id="Market_ELT", 
