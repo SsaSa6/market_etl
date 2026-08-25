@@ -1,7 +1,7 @@
 from airflow.sdk import DAG
 import pendulum
 from airflow.providers.standard.operators.python import PythonOperator
-from datetime import datetime
+from datetime import datetime,timedelta
 import extract
 import load
 
