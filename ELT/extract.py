@@ -14,7 +14,7 @@ def extract():
                 print("요청 성공")
         
         data = response.json()
-        
+        print("실행 성공")
         return data,collected_at
 
     except requests.exceptions.Timeout as e: #네트워크 지연과 같은 오류면

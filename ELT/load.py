@@ -42,6 +42,7 @@ def load(data,collected_at,slot_at):
             cursor.execute(insert_sql,values) #sql 실행
 
             conn.commit()
+            print("적재 성공")
 
             
 
