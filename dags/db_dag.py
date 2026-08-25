@@ -11,7 +11,7 @@ kst_tz = pendulum.timezone("Asia/Seoul")
 
 with DAG(dag_id="Market_ELT", 
          start_date=datetime(2026, 8, 14,tzinfo=kst_tz), 
-         schedule="*/5 * * * *",
+         schedule="*/1 * * * *",
          catchup=False,
          max_active_runs=1
     ) as dag:
