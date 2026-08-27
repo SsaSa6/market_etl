@@ -1,7 +1,7 @@
 import db
 import copy
 
-def load(data,collected_at,slot_at):
+def ticket_load(data,collected_at,slot_at):
     conn = db.get_connection() #서버연동
 
     change_dict = {"change": "changer", "timestamp": "time_stamp"} #키와 컬럼
@@ -43,6 +43,9 @@ def load(data,collected_at,slot_at):
 
             conn.commit()
             print("적재 성공")
+
+def pairs_load():
+     conn = db.get_connection()
 
             
 

@@ -1,7 +1,7 @@
 import requests
 from datetime import datetime
 
-def extract():
+def ticket_extract():
     url = "https://api.upbit.com/v1/ticker?markets=KRW-BTC"
     try:
         response = requests.get(url)

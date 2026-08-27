@@ -29,13 +29,13 @@ Airflow로 스케줄링하며 **AWS Lightsail에서 상시 운영 중**이다.
 
 전 구성이 하나의 Docker Compose로 관리된다. 컨테이너 간에는 서비스 이름(`db`, `postgres`)으로 통신하며, 로컬과 서버가 동일한 구성으로 동작한다.
 
-| 구분 | 사용 |
-|---|---|
-| 언어 | Python 3.13 |
-| 라이브러리 | `requests`, `pymysql`, `python-dotenv`, `pendulum` |
-| 오케스트레이션 | Apache Airflow 3.3.0 (LocalExecutor) |
-| 저장소 | MySQL 8 (시세), PostgreSQL 16 (Airflow 메타데이터) |
-| 인프라 | Docker Compose, AWS Lightsail |
+| 구분           | 사용                                               |
+| -------------- | -------------------------------------------------- |
+| 언어           | Python 3.13                                        |
+| 라이브러리     | `requests`, `pymysql`, `python-dotenv`, `pendulum` |
+| 오케스트레이션 | Apache Airflow 3.3.0 (LocalExecutor)               |
+| 저장소         | MySQL 8 (시세), PostgreSQL 16 (Airflow 메타데이터) |
+| 인프라         | Docker Compose, AWS Lightsail                      |
 
 ---
 
@@ -57,11 +57,11 @@ Airflow로 스케줄링하며 **AWS Lightsail에서 상시 운영 중**이다.
 
 **1. 시각을 세 종류로 분리**
 
-| 컬럼 | 의미 | 역할 |
-|---|---|---|
-| `trade_timestamp` | 거래소에서 체결이 일어난 시각 | 원본 데이터 |
-| `collected_at` | API를 실제로 호출한 시각 | 수집 지연 측정 |
-| `slot_at` | 이 데이터가 속한 수집 슬롯 | **중복 판단 키** |
+| 컬럼              | 의미                          | 역할             |
+| ----------------- | ----------------------------- | ---------------- |
+| `trade_timestamp` | 거래소에서 체결이 일어난 시각 | 원본 데이터      |
+| `collected_at`    | API를 실제로 호출한 시각      | 수집 지연 측정   |
+| `slot_at`         | 이 데이터가 속한 수집 슬롯    | **중복 판단 키** |
 
 **2. `slot_at`에 Airflow의 `data_interval_start` 사용**
 
@@ -79,15 +79,15 @@ ON DUPLICATE KEY UPDATE market = market
 
 ### 그 외 판단
 
-| 항목 | 결정 | 이유 |
-|---|---|---|
-| 기본 키 | `(market, slot_at)` 자연키 | 대리키(`auto_increment`) 제거. UNIQUE 제약이 PK로 통합되고, InnoDB는 PK 순서로 물리 저장하므로 종목·시간순 범위 조회에 유리 |
-| 금액·수량 타입 | `DECIMAL` | 실측 결과 아래 참조 |
-| Airflow Executor | `LocalExecutor` | 태스크 2개, 1분 주기에 CeleryExecutor는 과잉. redis·worker·flower를 제거해 컨테이너 10개 → 5개 |
-| 태스크 분리 | `extract` / `load` 2개 | 실패 지점이 UI에서 즉시 보이고, 실패한 단계만 재시도할 수 있음. API는 성공했는데 DB가 순간 불안정한 경우 수집을 다시 할 필요가 없음 |
-| 실행 환경 | Docker Compose | 로컬↔클라우드 이식이 `git clone` + `.env` 작성으로 끝남 |
-| DB 접속 계정 | 전용 계정 (`etl_user`) | 파이프라인은 지정된 DB에만 접근. root 권한 노출 회피 |
-| 외부 포트 | SSH(22)만 개방 | Airflow는 임의 파이썬 코드를 실행하는 도구. UI 노출 시 침해 영향이 서버 전체에 미침 |
+| 항목             | 결정                       | 이유                                                                                                                                |
+| ---------------- | -------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| 기본 키          | `(market, slot_at)` 자연키 | 대리키(`auto_increment`) 제거. UNIQUE 제약이 PK로 통합되고, InnoDB는 PK 순서로 물리 저장하므로 종목·시간순 범위 조회에 유리         |
+| 금액·수량 타입   | `DECIMAL`                  | 실측 결과 아래 참조                                                                                                                 |
+| Airflow Executor | `LocalExecutor`            | 태스크 2개, 1분 주기에 CeleryExecutor는 과잉. redis·worker·flower를 제거해 컨테이너 10개 → 5개                                      |
+| 태스크 분리      | `extract` / `load` 2개     | 실패 지점이 UI에서 즉시 보이고, 실패한 단계만 재시도할 수 있음. API는 성공했는데 DB가 순간 불안정한 경우 수집을 다시 할 필요가 없음 |
+| 실행 환경        | Docker Compose             | 로컬↔클라우드 이식이 `git clone` + `.env` 작성으로 끝남                                                                             |
+| DB 접속 계정     | 전용 계정 (`etl_user`)     | 파이프라인은 지정된 DB에만 접근. root 권한 노출 회피                                                                                |
+| 외부 포트        | SSH(22)만 개방             | Airflow는 임의 파이썬 코드를 실행하는 도구. UI 노출 시 침해 영향이 서버 전체에 미침                                                 |
 
 ---
 
@@ -153,9 +153,9 @@ Compose에서 `env_file`로 주입된 값을 `environment`가 덮어쓰는 우�
 
 ```yaml
 env_file:
-  - .env              # DB_HOST=localhost, DB_PORT=3308
+  - .env # DB_HOST=localhost, DB_PORT=3308
 environment:
-  DB_HOST: db         # 컨테이너 안에서는 이 값이 적용됨
+  DB_HOST: db # 컨테이너 안에서는 이 값이 적용됨
   DB_PORT: "3306"
 ```
 
@@ -178,15 +178,15 @@ environment:
 **진행 예정**
 
 - [ ] **정리 DAG** — `airflow db clean`으로 메타DB 정리, 오래된 로그 파일 삭제. 1분 주기 기준 태스크 로그가 하루 약 2,880개 생성되며, `xcom` 테이블에는 매 실행마다 시세 JSON이 저장된다
-- [ ] **종목 확장 (5~10종목)** — 업비트는 한 번의 호출로 여러 종목을 반환하므로 API 호출 횟수와 스케줄러 부하가 늘지 않는다. 스키마도 `market` 컬럼과 복합 PK로 이미 대응돼 있어 DDL 변경이 필요 없다. `load.py`의 단건 처리를 반복 적재로 변경하고, 저가 종목의 `DECIMAL` 자릿수를 검증해야 한다
+- [~] **종목 확장 (5~10종목)** — 업비트는 한 번의 호출로 여러 종목을 반환하므로 API 호출 횟수와 스케줄러 부하가 늘지 않는다. 스키마도 `market` 컬럼과 복합 PK로 이미 대응돼 있어 DDL 변경이 필요 없다. `load.py`의 단건 처리를 반복 적재로 변경하고, 저가 종목의 `DECIMAL` 자릿수를 검증해야 한다
 - [ ] **일별 집계(mart) 테이블** — raw/mart 분리. `acc_trade_volume`은 하루 단위로 리셋되는 누적값이므로 단순 합계로 계산하면 안 된다
-- [ ] **실패 알림** — 현재는 UI를 열어야만 실패를 알 수 있다
+- [~] **실패 알림** — 현재는 UI를 열어야만 실패를 알 수 있다
 
 **이후**
 
 - [ ] 대시보드
 - [ ] `requirements.txt` + 커스텀 Dockerfile로 의존성 버전 고정
-- [ ] 데이터 소스 확장 (호가, 캔들, 타 거래소)
+- [~] 데이터 소스 확장 (호가, 캔들, 타 거래소)
 - [ ] PostgreSQL 전환 — DB 교체 시 코드가 얼마나 깨지는지 확인하는 과제
 
 ---

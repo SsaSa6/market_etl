@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS data_set(
+CREATE TABLE IF NOT EXISTS Market_Ticket(
     market varchar(100),
     slot_at datetime, #데이터가 속한 슬롯, 키
     collected_at datetime, #api를 호출한 시점
