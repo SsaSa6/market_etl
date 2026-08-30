@@ -43,8 +43,8 @@ services:
       - "${DB_PORT}:3306"
     volumes:
       - dbdata:/var/lib/mysql #데이터 보존용
-      - ./SQL/ticket_table_sql.sql:/docker-entrypoint-initdb.d/ticket_table_sql.sql:ro #sql 경로 : 컨테이너 쪽에서의 경로
-      - ./SQL\pairs_table_sql.sql:/ocker-entrypoint-initdb.d/ticket_table_sql.sql:ro
+      - ./SQL/ticker_table_sql.sql:/docker-entrypoint-initdb.d/ticker_table_sql.sql:ro #sql 경로 : 컨테이너 쪽에서의 경로
+      - ./SQL/pairs_table_sql.sql:/docker-entrypoint-initdb.d/pairs_table_sql.sql:ro
 
   airflow-init:
     <<: *airflow-common

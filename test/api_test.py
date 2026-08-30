@@ -1,4 +1,5 @@
 import requests
+import copy
 from datetime import datetime
 
 def pairs_extract():
@@ -18,3 +19,7 @@ def pairs_extract():
     print(data)
 
     return data,collected_at
+
+def pairs_load(data,collected_at):
+    data[0]["collected_at"] = collected_at
+pairs_load(pairs_extract)

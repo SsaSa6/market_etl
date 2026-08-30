@@ -17,7 +17,7 @@ with DAG(dag_id="Market_ELT",
     ) as dag:
 
     def push_xcom(ti): #airflow의 구동 메타 데이터
-        ti.xcom_push(key = "xcom_key", value = extract.extract())
+        ti.xcom_push(key = "xcom_key", value = extract.ticker_extract())
 
     def pull_xcom(ti,**context):
         data,utc_collected_at = ti.xcom_pull(key ="xcom_key", task_ids = "extract") #extract의 데이터 받아오기
@@ -27,7 +27,7 @@ with DAG(dag_id="Market_ELT",
         utc_collected_at = pendulum.instance(utc_collected_at, tz="UTC")
         iso_collected_at = utc_collected_at.in_timezone(kst_tz)
         collected_at = iso_collected_at.replace(tzinfo=None)
-        load.load(data=data,collected_at=collected_at,slot_at=slot_at)
+        load.ticker_load(data=data,collected_at=collected_at,slot_at=slot_at)
 
     extract_task = PythonOperator(task_id="extract", python_callable=push_xcom)
 

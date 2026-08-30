@@ -1,7 +1,7 @@
 import db
 import copy
 
-def ticket_load(data,collected_at,slot_at):
+def ticker_load(data,collected_at,slot_at):
     conn = db.get_connection() #서버연동
 
     change_dict = {"change": "changer", "timestamp": "time_stamp"} #키와 컬럼
@@ -44,8 +44,18 @@ def ticket_load(data,collected_at,slot_at):
             conn.commit()
             print("적재 성공")
 
-def pairs_load():
+def pairs_load(data,collected_at):
      conn = db.get_connection()
+
+     change_dict = {"change": "changer", "timestamp": "time_stamp"}
+
+     data_copy = copy.deepcopy(data)
+
+     with conn:
+          with conn.cursor() as cousor:
+               pass
+
+
 
             
 

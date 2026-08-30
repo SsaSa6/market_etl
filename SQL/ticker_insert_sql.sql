@@ -1,4 +1,4 @@
-INSERT INTO Market_Ticket(market,trade_date,trade_time,trade_date_kst,trade_time_kst,trade_timestamp,opening_price,
+INSERT INTO Market_Ticker(market,trade_date,trade_time,trade_date_kst,trade_time_kst,trade_timestamp,opening_price,
 high_price,low_price,trade_price,prev_closing_price,changer,change_price,
 change_rate,signed_change_price,signed_change_rate,trade_volume,acc_trade_price,acc_trade_price_24h,
 acc_trade_volume,acc_trade_volume_24h,highest_52_week_price,highest_52_week_date,lowest_52_week_price,
