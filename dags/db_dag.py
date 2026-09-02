@@ -29,8 +29,8 @@ with DAG(dag_id="Market_ELT",
         collected_at = iso_collected_at.replace(tzinfo=None)
         load.ticker_load(data=data,collected_at=collected_at,slot_at=slot_at)
 
-    extract_task = PythonOperator(task_id="extract", python_callable=push_xcom)
+    ticekr_extract_task = PythonOperator(task_id="extract", python_callable=push_xcom)
 
-    load_task = PythonOperator(task_id="load", python_callable=pull_xcom)
+    ticker_load_task = PythonOperator(task_id="load", python_callable=pull_xcom)
 
-    extract_task >> load_task
+    ticekr_extract_task >> ticker_load_task
