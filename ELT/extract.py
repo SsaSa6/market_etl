@@ -43,7 +43,12 @@ def pairs_extract():
                 print("요청 실패")
         else:
                 print("요청 성공")
+
+
+        ls = [] #패킹용 리스트
+        ls.append(data)
+        ls.append(collected_at)
+        return ls
          
-        return data,collected_at
     except requests.exceptions.Timeout as e: #네트워크 지연과 같은 오류면
             print(f"오류가 난 이유는 : {e}")

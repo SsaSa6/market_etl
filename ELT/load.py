@@ -37,7 +37,7 @@ def ticker_load(data,collected_at,slot_at):
 
             values_sum = ','.join(values_sum)
 
-            insert_sql = f"INSERT INTO data_set ({columns}) VALUES ({values_sum}) ON DUPLICATE KEY UPDATE market = market"
+            insert_sql = f"INSERT INTO Market_Ticker ({columns}) VALUES ({values_sum}) ON DUPLICATE KEY UPDATE market = market"
 
             cursor.execute(insert_sql,values) #sql 실행
 
@@ -46,8 +46,6 @@ def ticker_load(data,collected_at,slot_at):
 
 def pairs_load(data,collected_at):
      conn = db.get_connection()
-
-     change_dict = {"change": "changer", "timestamp": "time_stamp"}
 
      data_copy = copy.deepcopy(data)
 

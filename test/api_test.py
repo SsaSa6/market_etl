@@ -25,7 +25,6 @@ def pairs_load(ls):
     data = ls #언패킹
     collected_at = ls[1]
     data[0]["collected_at"] = collected_at #collected_at 추가
-    #print(data[0])
 
     data[0]["event_warning"] = ""
     data[0]["event_caution_price_fluctuations"] = ""
